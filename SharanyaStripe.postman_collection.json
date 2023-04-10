@@ -1,0 +1,283 @@
+{
+	"info": {
+		"_postman_id": "bcaec15e-268d-47f1-87ae-f463b4c6e49f",
+		"name": "SharanyaStripe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25428898"
+	},
+	"item": [
+		{
+			"name": "Create Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Step 1: capture complete JSON Response, assign it to variable",
+							"var responseBody = pm.response.json();",
+							"console.log(responseBody.id);",
+							"//Step 2: assign this to a variable",
+							"pm.collectionVariables.set(\"custID\",responseBody.id);",
+							"pm.collectionVariables.set(\"name\", responseBody.name);",
+							"// pm.test(\"TC2- Name Check\", function(){",
+							"// pm.expect(name).to.eql(pm.collectionVariables.get(\"name\"));",
+							"// });",
+							"pm.test(\"TC2- Email ID Check\", function(){",
+							"pm.expect(responseBody.email).to.eql(\"sharanya1@test.com\");",
+							"});",
+							"pm.test(\"TC3- Name Check\", function(){",
+							"pm.expect(responseBody.name).to.equal(\"Sharanya1\");",
+							"});",
+							"pm.test(\"TC4-Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"customer\");",
+							"});",
+							"pm.test(\"TC5-Content-Type is present\", function () {",
+							"    pm.response.to.have.header(\"Content-Type\");",
+							"});",
+							"pm.test(\"TC6-Content-Type is json or not\", function () {",
+							"    var resHeader=pm.response.headers.get('Content-Type');",
+							"    pm.expect(resHeader).to.equal(\"application/json\");",
+							"});",
+							"pm.test(\"TC7-Response time is less than 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});",
+							"//console.log(pm.variables.get(\"localPhone\"));",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Sharanya1",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "sharanya1@test.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{protocol}}://{{url}}/{{endpoint}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{endpoint}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retreive a custormer",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{protocol}}://{{url}}/{{endpoint}}/{{custID}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{endpoint}}",
+						"{{custID}}"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Customer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "Sharanya2",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "sharanya2@test.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{protocol}}://{{url}}/{{endpoint}}/{{custID}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{endpoint}}",
+						"{{custID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a Customer",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{url}}/{{endpoint}}/{{custID}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{endpoint}}",
+						"{{custID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchRequest",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.stripe.com/v1/customers/search?query=email~\"Mitch\"",
+					"protocol": "https",
+					"host": [
+						"api",
+						"stripe",
+						"com"
+					],
+					"path": [
+						"v1",
+						"customers",
+						"search"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "email~\"Mitch\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{url}}/{{endpoint}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"{{endpoint}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "username",
+				"value": "sk_test_51MioahLAeG7FHEfYSAqjBK1QHfT70a6etVQ852SEyrYqxNssD7oT7hsLOtPFhrh6AU5KJKOShyh7sTwpcPcZHt1g00DBwQpTGX",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "custID",
+			"value": ""
+		},
+		{
+			"key": "name",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
